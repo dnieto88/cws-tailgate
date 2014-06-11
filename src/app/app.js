@@ -2,7 +2,8 @@ angular.module('cwsTailgate', [
   'ngRoute',
   'cwsTailgate.map',
   'cws-tailgate-templates',
-  'mongolabResourceHttp'
+  'mongolabResourceHttp',
+  'mm.foundation'
 ])
   .config(function($routeProvider) {
     'use strict';

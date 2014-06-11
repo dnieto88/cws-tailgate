@@ -2,16 +2,14 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
   .controller('MapCtrl', function($scope, cwsMapPoints, $log) {
     'use strict';
 
-    var tempTeam = "cowboys";
 
     $scope.map = {
       center: {
         latitude: '41.1757071',
         longitude: '-96.01572449999999',
       },
-      zoom: 8
+      zoom: 14
     };
-
 
     $scope.mapctrl = {
       tailgates: [],
@@ -21,9 +19,8 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
       selectedTeam: ''
     };
 
-
     $scope.newTailGate = {
-      team: tempTeam
+      team: ''
     };
 
     $scope.getTeams = function() {
@@ -39,10 +36,14 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
 
     $scope.getTailGates = function() {
       console.log('Getting tailgates for team', $scope.mapctrl.selectedTeam);
+      $scope.newTailGate.team = $scope.mapctrl.selectedTeam;
       cwsMapPoints.get($scope.mapctrl.selectedTeam).then(function(success) {
-        //add id for google maps api
+        //todo: clean this up consider storing in data base?
         for (var i = 0; i < success.length; i++) {
           success[i].id = i;
+          if(!success[i].icon){
+            success[i].icon = 'assets/beer.png';
+          }
         };
 
         $scope.mapctrl.tailgates = success;
@@ -73,7 +74,7 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
       cwsMapPoints.add(ntg).then(function(success) {
 
         $scope.newTailGate = {
-          team: tempTeam
+          team: $scope.mapctrl.selectedTeam
         };
 
 
@@ -87,11 +88,23 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
     //TODO: replace with configurable constant
     $scope.cwsMarker = {
       coords: {
-        latitude: '41.1757071',
-        longitude: '-96.01572449999999'
+        latitude: '41.2670',
+        longitude: '-95.9320'
       },
-      label: 'Big Show Home',
-      position: '(0,0)'
+      label: 'CWS',
+      position: '0 0',
+      icon: 'assets/star.png'
+
+    };
+
+    $scope.busMarker = {
+      coords: {
+        latitude: '41.280636', 
+        longitude: '-95.912817'
+      },
+      label: 'ULTRA MEGA PARTY BUS 1988-?',
+      position: '0 0',
+      icon: 'assets/bus.png'
     };
 
     $scope.currentLocationMarker = {

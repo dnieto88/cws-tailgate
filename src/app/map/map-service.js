@@ -46,6 +46,8 @@ angular.module('cwsTailgate.map.service', ['mongolabResourceHttp'])
 		return deferred.promise;
 	}
 
+	
+
 	return {
 		get: get,
 		getAllTeams: getAllTeams,

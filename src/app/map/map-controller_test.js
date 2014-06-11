@@ -10,21 +10,48 @@
    describe('Map: controller', function() {
 
      var ctrl;
-     beforeEach(inject(function($controller) {
+     beforeEach(inject(function($controller, _cwsMapPoints_) {
 
-       ctrl = $controller('MapCtrl', {
-         $scope: $scope,
-       });
+       ctrl = function() {
+         return $controller('MapCtrl', {
+           $scope: $scope,
+           cwsMapPoints: _cwsMapPoints_
+         });
+       }
      }));
 
 
-     it("should initialize",function(){
-     	expect(ctrl).not.toBe(null); 
+     it("should initialize", function() {
+       expect(ctrl()).not.toBe(null);
      });
 
 
-     it("should ",function(){
-             
+     it("should get tailgates and location on load", function() {
+
+       spyOn($scope, 'getTailGates').andCallFake(function(){});
+       spyOn($scope, 'getCurrentLocation').andCallFake(function(){});
+        ctrl();
+
+       expect($scope.getCurrentLocation).toHaveBeenCalled();
+       expect($scope.getTailGates).toHaveBeenCalled();
      });
+
+
+     it("should be able to add a tailgate with current location",function(){
+        ctrl();
+        $scope.mapctrl.currentLocation = {
+          coords: {
+            latitude: 1,
+            longitude: 1
+          }
+
+        };
+
+        $scope.add({
+          name: 'dan'
+        });
+        
+     });
+
    });
  });

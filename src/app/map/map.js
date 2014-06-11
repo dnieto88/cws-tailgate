@@ -1,1 +1,1 @@
-angular.module('cwsTailgate.map', ['cwsTailgate.map.controller']);
+angular.module('cwsTailgate.map', ['cwsTailgate.map.controller', 'cwsTailgate.map.service']);

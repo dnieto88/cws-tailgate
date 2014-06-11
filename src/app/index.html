@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <nav class="top-bar" >
+  <nav class="top-bar">
     <ul class="title-area">
       <li class="name">
         <h1><a>CWS Tailgate Locator</a>
@@ -21,12 +21,12 @@
     </ul>
   </nav>
 
-    <div class='app small-12 columns' ng-view>
-    </div>
+  <div class='app small-12 columns' ng-view>
+  </div>
 
 
   <script src='//maps.googleapis.com/maps/api/js?key=AIzaSyDt8EeSZlLBxiSMk14vR_LUPaYRTtxYYQc'></script>
-  <script src='/lodash/dist/lodash.underscore.js'></script>
+
 
   <!-- inject:vendor:js -->
   <script src="/angular/angular.js"></script>
@@ -36,9 +36,9 @@
   <script src="/angular-google-maps/dist/angular-google-maps.js"></script>
   <!-- endinject -->
 
-  <script src='/angularjs-mongolab-promise/src/mongolabResourceHttp.js'></script>
 
   <!-- inject:js -->
+  <script src="/assets/mongolabResourceHttp.js"></script>
   <script src="/cws-tailgate-templates.js"></script>
   <script src="/map/map-service.js"></script>
   <script src="/map/map-controller.js"></script>

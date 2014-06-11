@@ -17,9 +17,7 @@ var gulp = require('gulp'),
 var htmlminOpts = {
   removeComments: true,
   collapseWhitespace: true,
-  removeEmptyAttributes: false,
-  collapseBooleanAttributes: true,
-  removeRedundantAttributes: true
+  removeEmptyAttributes: false
 };
 
 /**
@@ -279,11 +277,13 @@ function cssFiles(opt) {
 
 function appFiles() {
   var files = [
+    './assets/mongolabResourceHttp.js',
     './.tmp/' + bower.name + '-templates.js',
     './.tmp/src/app/**/*.js',
     '!./.tmp/src/app/**/*_test.js',
     './src/app/**/*.js',
     '!./src/app/**/*_test.js'
+
   ];
   return gulp.src(files)
     .pipe(g.angularFilesort());

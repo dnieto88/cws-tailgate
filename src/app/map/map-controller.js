@@ -26,16 +26,16 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
     $scope.getTeams = function() {
 
       cwsMapPoints.getAllTeams().then(function(success) {
-        console.log('get All teams', success);
+   
         $scope.mapctrl.teams = success;
         //$scope.mapctrl.selectedTeam = success[0];
       }, function(err) {
-        console.log(err);
+      console.log(err);
       });
     };
 
     $scope.getTailGates = function() {
-      console.log('Getting tailgates for team', $scope.mapctrl.selectedTeam);
+     
       $scope.newTailGate.team = $scope.mapctrl.selectedTeam;
       cwsMapPoints.get($scope.mapctrl.selectedTeam).then(function(success) {
         //todo: clean this up consider storing in data base?
@@ -47,7 +47,7 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
         };
 
         $scope.mapctrl.tailgates = success;
-        console.log('tailgates: -> ',success);
+        
       }, function(err) {
         console.log(err);
       });
@@ -60,6 +60,7 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
         $scope.currentLocationMarker = success;
         $scope.map.center = success.coords;
       }, function(err) {
+        $scope.map.center = $scope.busMarker.coords;
         console.log(err);
       });
     }

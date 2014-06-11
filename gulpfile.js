@@ -2,14 +2,17 @@
 'use strict';
 
 var gulp = require('gulp'),
-    g = require('gulp-load-plugins')({lazy: false}),
-    noop = g.util.noop,
-    es = require('event-stream'),
-    queue = require('streamqueue'),
-    lazypipe = require('lazypipe'),
-    stylish = require('jshint-stylish'),
-    bower = require('./bower'),
-    isWatching = false;
+  g = require('gulp-load-plugins')({
+    lazy: false
+  }),
+  noop = g.util.noop,
+  es = require('event-stream'),
+  queue = require('streamqueue'),
+  lazypipe = require('lazypipe'),
+  stylish = require('jshint-stylish'),
+  bower = require('./bower'),
+  karma = require('karma').server,
+  isWatching = false;
 
 var htmlminOpts = {
   removeComments: true,
@@ -22,7 +25,7 @@ var htmlminOpts = {
 /**
  * JS Hint
  */
-gulp.task('jshint', function () {
+gulp.task('jshint', function() {
   return gulp.src([
     './gulpfile.js',
     './src/app/**/*.js'
@@ -35,11 +38,11 @@ gulp.task('jshint', function () {
 /**
  * CSS
  */
-gulp.task('clean-css', function () {
+gulp.task('clean-css', function() {
   return gulp.src('./.tmp/css').pipe(g.clean());
 });
 
-gulp.task('styles', ['clean-css'], function () {
+gulp.task('styles', ['clean-css'], function() {
   return gulp.src([
     './src/app/**/*.scss',
     '!./src/app/**/_*.scss'
@@ -50,11 +53,11 @@ gulp.task('styles', ['clean-css'], function () {
     .pipe(livereload());
 });
 
-gulp.task('styles-dist', ['styles'], function () {
+gulp.task('styles-dist', ['styles'], function() {
   return cssFiles().pipe(dist('css', bower.name));
 });
 
-gulp.task('csslint', ['styles'], function () {
+gulp.task('csslint', ['styles'], function() {
   return cssFiles()
     .pipe(g.cached('csslint'))
     .pipe(g.csslint('./.csslintrc'))
@@ -64,25 +67,29 @@ gulp.task('csslint', ['styles'], function () {
 /**
  * Scripts
  */
-gulp.task('scripts-dist', ['templates-dist'], function () {
-  return appFiles().pipe(dist('js', bower.name, {ngmin: true}));
+gulp.task('scripts-dist', ['templates-dist'], function() {
+  return appFiles().pipe(dist('js', bower.name, {
+    ngmin: true
+  }));
 });
 
 /**
  * Templates
  */
-gulp.task('templates', function () {
+gulp.task('templates', function() {
   return templateFiles().pipe(buildTemplates());
 });
 
-gulp.task('templates-dist', function () {
-  return templateFiles({min: true}).pipe(buildTemplates());
+gulp.task('templates-dist', function() {
+  return templateFiles({
+    min: true
+  }).pipe(buildTemplates());
 });
 
 /**
  * Vendors
  */
-gulp.task('vendors', function () {
+gulp.task('vendors', function() {
   var bowerStream = g.bowerFiles();
   return es.merge(
     bowerStream.pipe(g.filter('**/*.css')).pipe(dist('css', 'vendors')),
@@ -96,11 +103,18 @@ gulp.task('vendors', function () {
 gulp.task('index', index);
 gulp.task('build-all', ['styles', 'templates'], index);
 
-function index () {
-  var opt = {read: false};
+function index() {
+  var opt = {
+    read: false
+  };
   return gulp.src('./src/app/index.html')
-    .pipe(g.inject(g.bowerFiles(opt), {ignorePath: 'bower_components', starttag: '<!-- inject:vendor:{{ext}} -->'}))
-    .pipe(g.inject(es.merge(appFiles(), cssFiles(opt)), {ignorePath: ['.tmp', 'src/app']}))
+    .pipe(g.inject(g.bowerFiles(opt), {
+      ignorePath: 'bower_components',
+      starttag: '<!-- inject:vendor:{{ext}} -->'
+    }))
+    .pipe(g.inject(es.merge(appFiles(), cssFiles(opt)), {
+      ignorePath: ['.tmp', 'src/app']
+    }))
     .pipe(gulp.dest('./src/app/'))
     .pipe(g.embedlr())
     .pipe(gulp.dest('./.tmp/'))
@@ -110,7 +124,7 @@ function index () {
 /**
  * Assets
  */
-gulp.task('assets', function () {
+gulp.task('assets', function() {
   return gulp.src('./src/app/assets/**')
     .pipe(gulp.dest('./dist/assets'));
 });
@@ -118,10 +132,15 @@ gulp.task('assets', function () {
 /**
  * Dist
  */
-gulp.task('dist', ['vendors', 'assets', 'styles-dist', 'scripts-dist'], function () {
+gulp.task('dist', ['vendors', 'assets', 'styles-dist', 'scripts-dist'], function() {
   return gulp.src('./src/app/index.html')
-    .pipe(g.inject(gulp.src('./dist/vendors.min.{js,css}'), {ignorePath: 'dist', starttag: '<!-- inject:vendor:{{ext}} -->'}))
-    .pipe(g.inject(gulp.src('./dist/' + bower.name + '.min.{js,css}'), {ignorePath: 'dist'}))
+    .pipe(g.inject(gulp.src('./dist/vendors.min.{js,css}'), {
+      ignorePath: 'dist',
+      starttag: '<!-- inject:vendor:{{ext}} -->'
+    }))
+    .pipe(g.inject(gulp.src('./dist/' + bower.name + '.min.{js,css}'), {
+      ignorePath: 'dist'
+    }))
     .pipe(g.htmlmin(htmlminOpts))
     .pipe(gulp.dest('./dist/'));
 });
@@ -138,18 +157,18 @@ gulp.task('statics', g.serve({
  * Watch
  */
 gulp.task('serve', ['watch']);
-gulp.task('watch', ['statics', 'default'], function () {
+gulp.task('watch', ['statics', 'default'], function() {
   isWatching = true;
   // Initiate livereload server:
   g.livereload();
-  gulp.watch('./src/app/**/*.js', ['jshint']).on('change', function (evt) {
+  gulp.watch('./src/app/**/*.js', ['jshint']).on('change', function(evt) {
     if (evt.type !== 'changed') {
       gulp.start('index');
     }
   });
   gulp.watch('./src/app/index.html', ['index']);
   gulp.watch(['./src/app/**/*.html', '!./src/app/index.html'], ['templates']);
-  gulp.watch(['./src/app/**/*.scss'], ['csslint']).on('change', function (evt) {
+  gulp.watch(['./src/app/**/*.scss'], ['csslint']).on('change', function(evt) {
     if (evt.type !== 'changed') {
       gulp.start('index');
     }
@@ -169,7 +188,7 @@ gulp.task('lint', ['jshint', 'csslint']);
 /**
  * Test
  */
-gulp.task('test', ['templates'], function () {
+gulp.task('test', ['templates'], function() {
   return testFiles()
     .pipe(g.karma({
       configFile: 'karma.conf.js',
@@ -177,31 +196,66 @@ gulp.task('test', ['templates'], function () {
     }));
 });
 
+
+
 /**
  * Inject all files for tests into karma.conf.js
  * to be able to run `karma` without gulp.
  */
-gulp.task('karma-conf', ['templates'], function () {
+gulp.task('karma-conf', ['templates'], function() {
   return gulp.src('./karma.conf.js')
     .pipe(g.inject(testFiles(), {
       starttag: 'files: [',
       endtag: ']',
       addRootSlash: false,
-      transform: function (filepath, file, i, length) {
+      transform: function(filepath, file, i, length) {
         return '  \'' + filepath + '\'' + (i + 1 < length ? ',' : '');
       }
     }))
     .pipe(gulp.dest('./'));
 });
 
+function karmaExit(exitCode) {
+  process.exit(exitCode);
+}
+
+var karmaCommonConf = {
+  browsers: ['PhantomJS'],
+  frameworks: ['jasmine'],
+  files: ['./bower_components/google-maps-mock/google-maps-mock.js',
+    './bower_components/angular/angular.js',
+    './bower_components/angular-route/angular-route.js',
+    './bower_components/lodash/dist/lodash.compat.js',
+    './bower_components/angular-google-maps/dist/angular-google-maps.js',
+    './bower_components/angular-mocks/angular-mocks.js',
+    './bower_components/angularjs-mongolab-promise/src/mongolabResourceHttp.js',
+    './.tmp/' + bower.name + '-templates.js',
+    './.tmp/src/app/**/*.js',
+    '!./.tmp/src/app/**/*_test.js',
+    './src/app/**/*.js',
+    '!./src/app/**/*_test.js',
+    './src/app/**/*_test.js', './.tmp/src/app/**/*_test.js'
+  ],
+  singleRun: false
+};
+
+gulp.task('tdd', function() {
+  karma.start(karmaCommonConf, karmaExit);
+});
+
+
 /**
  * Test files
  */
+
 function testFiles() {
-  return new queue({objectMode: true})
+  return new queue({
+    objectMode: true
+  })
     .queue(gulp.src('./bower_components/google-maps-mock/google-maps-mock.js'))
     .queue(g.bowerFiles().pipe(g.filter('**/*.js')))
     .queue(gulp.src('./bower_components/angular-mocks/angular-mocks.js'))
+    .queue(gulp.src('./bower_components/angularjs-mongolab-promise/src/mongolabResourceHttp.js'))
     .queue(appFiles())
     .queue(gulp.src(['./src/app/**/*_test.js', './.tmp/src/app/**/*_test.js']))
     .done();
@@ -210,14 +264,16 @@ function testFiles() {
 /**
  * All CSS files as a stream
  */
-function cssFiles (opt) {
+
+function cssFiles(opt) {
   return gulp.src('./.tmp/css/**/*.css', opt);
 }
 
 /**
  * All AngularJS application files as a stream
  */
-function appFiles () {
+
+function appFiles() {
   var files = [
     './.tmp/' + bower.name + '-templates.js',
     './.tmp/src/app/**/*.js',
@@ -232,7 +288,8 @@ function appFiles () {
 /**
  * All AngularJS templates/partials as a stream
  */
-function templateFiles (opt) {
+
+function templateFiles(opt) {
   return gulp.src(['./src/app/**/*.html', '!./src/app/index.html'], opt)
     .pipe(opt && opt.min ? g.htmlmin(htmlminOpts) : noop());
 }
@@ -240,7 +297,8 @@ function templateFiles (opt) {
 /**
  * Build AngularJS templates/partials
  */
-function buildTemplates () {
+
+function buildTemplates() {
   return lazypipe()
     .pipe(g.ngHtml2js, {
       moduleName: bower.name + '-templates',
@@ -259,7 +317,8 @@ function buildTemplates () {
  * @param {String} name
  * @param {Object} opt
  */
-function dist (ext, name, opt) {
+
+function dist(ext, name, opt) {
   opt = opt || {};
   return lazypipe()
     .pipe(g.concat, name + '.' + ext)
@@ -275,7 +334,8 @@ function dist (ext, name, opt) {
 /**
  * Livereload (or noop if not run by watch)
  */
-function livereload () {
+
+function livereload() {
   return lazypipe()
     .pipe(isWatching ? g.livereload : noop)();
 }
@@ -283,7 +343,8 @@ function livereload () {
 /**
  * Jshint with stylish reporter
  */
-function jshint (jshintfile) {
+
+function jshint(jshintfile) {
   return lazypipe()
     .pipe(g.jshint, jshintfile)
     .pipe(g.jshint.reporter, stylish)();

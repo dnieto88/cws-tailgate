@@ -4,6 +4,8 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
 
     $scope.alerts = [];
 
+
+
     $scope.closeAlert = function(i) {
       $scope.alerts.splice(i, 1);
     };
@@ -13,9 +15,23 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
         latitude: '41.1757071',
         longitude: '-96.01572449999999',
       },
-      zoom: 13
+      zoom: 13,
+      control: {},
+      events: {
+        tilesloaded: function(map) {
+          $scope.$apply(function() {
+         
+      
+            $log.info('this is the map instance', map);
+          });
+        }
+      },
+      options: {
+        panControl: true
+      }
     };
 
+ 
     $scope.mapctrl = {
       tailgates: [],
       currentLocation: {},
@@ -86,8 +102,14 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
         $scope.currentLocationMarker = success;
         $scope.map.center = success.coords;
       }, function(err) {
-        $scope.mapctrl.currentLocation = $scope.busMarker;
-        $scope.map.center = $scope.busMarker.coords;
+        angular.copy($scope.busMarker, $scope.mapctrl.currentLocation);
+        angular.copy($scope.mapctrl.currentLocation, $scope.busMarker);
+        //$scope.mapctrl.currentLocation = $scope.busMarker;
+        $scope.map.center = {
+          latitude: $scope.busMarker.coords.latitude,
+          longitude: $scope.busMarker.coords.longitude
+        };
+        
         $log.error(err);
       });
     };

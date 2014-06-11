@@ -5184,13 +5184,14 @@ body, html {
   overflow-x: hidden; }
 
 .app {
-  padding: 0.25em; }
+  padding: 0.25rem; }
 
 .alert-bar {
   position: fixed;
-  top: -56px;
+  top: -0px;
   left: 0px;
-  width: 100%; }
+  width: 100%;
+  z-index: 99999; }
 
 .angular-google-map-container {
   height: 450px;

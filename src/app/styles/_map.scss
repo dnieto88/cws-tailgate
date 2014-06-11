@@ -1,5 +1,6 @@
 .angular-google-map-container {
-    height: 600px;
+    height: 450px;
+    margin-left: -.25rem;
     img {
         max-width: none;
         height: auto;
@@ -17,7 +18,10 @@
     padding: .25rem;
     border: 1px solid white;
 }
+.tailgate-list {
+	font-size: .8rem;
 
+}
 .bus-label {
 	background: white;
 	color: black;

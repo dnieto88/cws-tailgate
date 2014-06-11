@@ -1,5 +1,6 @@
 angular.module('cwsTailgate', [
   'ngRoute',
+  'ngTouch',
   'cwsTailgate.map',
   'cws-tailgate-templates',
   'mongolabResourceHttp',

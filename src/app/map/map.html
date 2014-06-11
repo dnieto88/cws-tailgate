@@ -1,3 +1,7 @@
+  <div class='alert-bar'>
+   <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+  </div>
+
 <div class='begin' ng-hide='mapctrl.selectedTeam'>
   <div class='row'>
     <div class='small-12 columns'>
@@ -8,8 +12,9 @@
   </div>
 </div>
 
+
 <div class='row'>
-  <div class='small-12 columns'>
+  <div class='small-12 medium-4 columns end'>
     <select ng-model="mapctrl.selectedTeam" ng-options="t as t for t in mapctrl.teams" ng-change="getTailGates()">
       <option value="">-- Select a Team--</option>
     </select>
@@ -18,7 +23,7 @@
 
 <div ng-if='mapctrl.selectedTeam'>
   <div class='row'>
-    <google-map center="map.center" zoom="map.zoom" draggable='true' pan='true'>
+    <google-map center="map.center" zoom="map.zoom" draggable='true' pan='true' class='small-11 large-12 columns end'>
       <marker coords='currentLocationMarker.coords'>
         <marker-label content='"You are Here"' anchor='0 0' class='tailgate-label'>
         </marker-label>
@@ -38,36 +43,42 @@
   </div>
 
   <div class='row'>
-    <div class='small-12 medium-6 columns end'>
+    <div class='small-12 medium-6 columns '>
+      <div class='panel primary add-team-form'>
+        <h2>{{mapctrl.selectedTeam}} Tail Gates</h2>
+        <p class='alert-panel' ng-hide='mapctrl.tailgates'>
+        	There are no tail gates for {{mapctrl.selectedTeam}} yet.  Be the first to start the party
+        </p>
+        <div ng-repeat='tg in mapctrl.tailgates' class='tailgate-list'>
+          {{tg.name}} | {{tg.time | date}}
+        </div>
+      </div>
+    </div>
+    <div class='small-12 medium-6 columns'>
       <div class='panel primary add-team-form'>
         <h2>Add Tail Gate</h2>
-        <form ng-model='newtailGate'>
+        <form name='form' novalidate>
           <div class='row'>
 
             <label>Name:
-              <input type='text' ng-model='newTailGate.name'>
+              <input type='text' ng-model='newTailGate.name' ng-required='true' placeholder='Give Your Tail Gate A Name' tab-index='0'>
             </label>
 
           </div>
           <div class='row'>
-
             <label>Team:
-              <input type='text' ng-model='newTailGate.team'>
+              <input type='text' ng-model='newTailGate.team' ng-required="true" placeholder='Your Favorite Team' tab-index='1' typeahead="team for team in mapctrl.teams | filter:$viewValue | limitTo:8" typeahead-editable='false'>
             </label>
-
           </div>
           <div class='row'>
 
             <label>
-              <input type='checkbox' ng-model='mapctrl.useCurrentLocation'>
-              Use Current Location
+              <input type='checkbox' ng-model='mapctrl.useCurrentLocation' ng-disabled='true'>Use Current Location
             </label>
 
           </div>
           <div class='row'>
-
-            <button class='button expand' ng-click='add(newTailGate)'>Add tailgate</button>
-
+            <button class='expand' ng-click='add(newTailGate)' ng-disabled='form.$invalid'>Add Tail Gate</button>
           </div>
         </form>
 
@@ -75,6 +86,8 @@
 
 
     </div>
+
+
 
   </div>
 </div>

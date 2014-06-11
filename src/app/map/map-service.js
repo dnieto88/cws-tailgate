@@ -22,8 +22,17 @@ angular.module('cwsTailgate.map.service', ['mongolabResourceHttp'])
 		return newTailGate.$saveOrUpdate();
 	}
 
-	var getAllTeams = function() {
+	var getAllTeamsWithTailGates = function() {
 		return mongo.distinct('team');
+	}
+
+	//Should be extracted to a service
+	var getAllTeams = function() {
+		var deferred = $q.defer();
+
+		deferred.resolve(['UC-Irvine', 'Texas', 'Lousiville', 'Vanderbilt', 'Texas Tech', 'TCU', 'Virginia', 'Mississippi']);
+		 
+		return deferred.promise;
 	}
 
 	var currentLocation = function() {
@@ -46,7 +55,7 @@ angular.module('cwsTailgate.map.service', ['mongolabResourceHttp'])
 		return deferred.promise;
 	}
 
-	
+
 
 	return {
 		get: get,

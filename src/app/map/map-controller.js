@@ -2,13 +2,14 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
   .controller('MapCtrl', function($scope, cwsMapPoints, $log) {
     'use strict';
 
+    $scope.alerts = [];
 
     $scope.map = {
       center: {
         latitude: '41.1757071',
         longitude: '-96.01572449999999',
       },
-      zoom: 14
+      zoom: 13
     };
 
     $scope.mapctrl = {
@@ -46,6 +47,7 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
           }
         };
 
+        
         $scope.mapctrl.tailgates = success;
         
       }, function(err) {

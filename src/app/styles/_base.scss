@@ -5,3 +5,10 @@ body, html {
 .app {
 	padding: .25em;
 }
+
+.alert-bar {
+	position: fixed;
+	top: -56px;
+	left: 0px;
+	width: 100%;
+}

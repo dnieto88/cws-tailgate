@@ -25,7 +25,7 @@
 
 <div ng-if='mapctrl.selectedTeam'>
   <div class='row'>
-    <google-map center="map.center" zoom="map.zoom" draggable='true' pan='true' class='small-11 large-12 columns end'>
+    <google-map center="map.center" zoom="map.zoom" draggable='false' pan='true' class='small-12 large-12 columns end'>
       <marker coords='currentLocationMarker.coords'>
         <marker-label content='"You are Here"' anchor='0 0' class='tailgate-label'>
         </marker-label>

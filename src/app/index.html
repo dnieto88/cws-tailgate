@@ -3,38 +3,41 @@
 
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no">
   <title>cwsTailgate</title>
-  <!-- inject:vendor:css -->
-  <link rel="stylesheet" href="/foundation/css/foundation.css">
-  <!-- endinject -->
+
   <!-- inject:css -->
   <link rel="stylesheet" href="/css/app.css">
   <!-- endinject -->
 </head>
 
 <body>
-  <hgroup>
-    <h1>cwsTailgate</h1>
-  </hgroup>
-  <ng-view></ng-view>
+  <nav class="top-bar" >
+    <ul class="title-area">
+      <li class="name">
+        <h1><a>CWS Tailgate Locator</a>
+        </h1>
+      </li>
+    </ul>
+  </nav>
 
-  <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
-<script src='/lodash/dist/lodash.underscore.js'></script>  
+    <div class='app small-12 columns' ng-view>
+    </div>
+
+
+  <script src='//maps.googleapis.com/maps/api/js?key=AIzaSyDt8EeSZlLBxiSMk14vR_LUPaYRTtxYYQc'></script>
+  <script src='/lodash/dist/lodash.underscore.js'></script>
 
   <!-- inject:vendor:js -->
   <script src="/angular/angular.js"></script>
   <script src="/angular-route/angular-route.js"></script>
   <script src="/lodash/dist/lodash.compat.js"></script>
-  <script src="/jquery/dist/jquery.js"></script>
-  <script src="/fastclick/lib/fastclick.js"></script>
-  <script src="/jquery.cookie/jquery.cookie.js"></script>
-  <script src="/jquery-placeholder/jquery.placeholder.js"></script>
+  <script src="/angular-foundation/mm-foundation-tpls.js"></script>
   <script src="/angular-google-maps/dist/angular-google-maps.js"></script>
-  <script src="/foundation/js/foundation.js"></script>
   <!-- endinject -->
-    
+
   <script src='/angularjs-mongolab-promise/src/mongolabResourceHttp.js'></script>
-  
+
   <!-- inject:js -->
   <script src="/cws-tailgate-templates.js"></script>
   <script src="/map/map-service.js"></script>

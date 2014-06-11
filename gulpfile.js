@@ -47,7 +47,10 @@ gulp.task('styles', ['clean-css'], function() {
     './src/app/**/*.scss',
     '!./src/app/**/_*.scss'
   ])
-    .pipe(g.sass({includePaths: ['./bower_components/foundation/scss']}))
+    .pipe(g.sass({
+      style: 'expanded',
+      includePaths: ['./bower_components/foundation/scss']
+    }))
     .pipe(gulp.dest('./.tmp/css/'))
     .pipe(g.cached('built-css'))
     .pipe(livereload());

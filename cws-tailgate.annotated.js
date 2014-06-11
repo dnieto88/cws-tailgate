@@ -140,7 +140,7 @@ angular.module('mongolabResourceHttp', []).factory('$mongolabResourceHttp', [
   module.run([
     '$templateCache',
     function ($templateCache) {
-      $templateCache.put('/cws-tailgate/map/map.html', '<div class="begin" ng-hide="mapctrl.selectedTeam"><div class="row"><div class="small-12 columns"><div class="panel"><p>Select A Team To Begin</p></div></div></div></div><div class="row"><div class="small-12 columns"><select ng-model="mapctrl.selectedTeam" ng-options="t as t for t in mapctrl.teams" ng-change="getTailGates()"><option value="">-- Select a Team--</option></select></div></div><div ng-if="mapctrl.selectedTeam"><div class="row"><google-map center="map.center" zoom="map.zoom" draggable="true" pan="true"><marker coords="currentLocationMarker.coords"><marker-label content="&quot;You are Here&quot;" anchor="0 0" class="tailgate-label"></marker-label></marker><marker coords="cwsMarker.coords" icon="cwsMarker.icon"><marker-label content="cwsMarker.label" anchor="0 0" class="tailgate-label"></marker-label></marker><marker coords="busMarker.coords" icon="busMarker.icon"><marker-label content="busMarker.label" anchor="0 0" class="bus-label"></marker-label></marker><markers models="mapctrl.tailgates" coords="\'coords\'" labelcontent="\'name\'" labelanchor="0 0" labelclass="tailgate-label" icon="\'icon\'" click="showDetails(m)"></markers></google-map></div><div class="row"><div class="small-12 medium-6 columns end"><div class="panel primary add-team-form"><h2>Add Tail Gate</h2><form ng-model="newtailGate"><div class="row"><label>Name:<input type="text" ng-model="newTailGate.name"></label></div><div class="row"><label>Team:<input type="text" ng-model="newTailGate.team"></label></div><div class="row"><label><input type="checkbox" ng-model="mapctrl.useCurrentLocation">Use Current Location</label></div><div class="row"><button class="button expand" ng-click="add(newTailGate)">Add tailgate</button></div></form></div></div></div></div>');
+      $templateCache.put('/cws-tailgate/map/map.html', '<div class="alert-bar"><alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert></div><div class="begin" ng-hide="mapctrl.selectedTeam"><div class="row"><div class="small-12 columns"><div class="panel"><p>Select A Team To Begin</p></div></div></div></div><div class="row"><div class="small-12 medium-4 columns end"><select ng-model="mapctrl.selectedTeam" ng-options="t as t for t in mapctrl.teams" ng-change="getTailGates()"><option value="">-- Select a Team--</option></select></div></div><div ng-if="mapctrl.selectedTeam"><div class="row"><google-map center="map.center" zoom="map.zoom" draggable="true" pan="true" class="small-11 large-12 columns end"><marker coords="currentLocationMarker.coords"><marker-label content="&quot;You are Here&quot;" anchor="0 0" class="tailgate-label"></marker-label></marker><marker coords="cwsMarker.coords" icon="cwsMarker.icon"><marker-label content="cwsMarker.label" anchor="0 0" class="tailgate-label"></marker-label></marker><marker coords="busMarker.coords" icon="busMarker.icon"><marker-label content="busMarker.label" anchor="0 0" class="bus-label"></marker-label></marker><markers models="mapctrl.tailgates" coords="\'coords\'" labelcontent="\'name\'" labelanchor="0 0" labelclass="tailgate-label" icon="\'icon\'" click="showDetails(m)"></markers></google-map></div><div class="row"><div class="small-12 medium-6 columns"><div class="panel primary add-team-form"><h2>{{mapctrl.selectedTeam}} Tail Gates</h2><p class="alert-panel" ng-hide="mapctrl.tailgates">There are no tail gates for {{mapctrl.selectedTeam}} yet. Be the first to start the party</p><div ng-repeat="tg in mapctrl.tailgates" class="tailgate-list">{{tg.name}} | {{tg.time | date}}</div></div></div><div class="small-12 medium-6 columns"><div class="panel primary add-team-form"><h2>Add Tail Gate</h2><form name="form" novalidate=""><div class="row"><label>Name:<input type="text" ng-model="newTailGate.name" ng-required="true" placeholder="Give Your Tail Gate A Name" tab-index="0"></label></div><div class="row"><label>Team:<input type="text" ng-model="newTailGate.team" ng-required="true" placeholder="Your Favorite Team" tab-index="1" typeahead="team for team in mapctrl.teams | filter:$viewValue | limitTo:8" typeahead-editable="false"></label></div><div class="row"><label><input type="checkbox" ng-model="mapctrl.useCurrentLocation" ng-disabled="true">Use Current Location</label></div><div class="row"><button class="expand" ng-click="add(newTailGate)" ng-disabled="form.$invalid">Add Tail Gate</button></div></form></div></div></div></div>');
     }
   ]);
 }());
@@ -164,8 +164,23 @@ angular.module('cwsTailgate.map.service', ['mongolabResourceHttp']).constant('MO
       var newTailGate = new mongo(tailgate);
       return newTailGate.$saveOrUpdate();
     };
-    var getAllTeams = function () {
+    var getAllTeamsWithTailGates = function () {
       return mongo.distinct('team');
+    };
+    //Should be extracted to a service
+    var getAllTeams = function () {
+      var deferred = $q.defer();
+      deferred.resolve([
+        'UC-Irvine',
+        'Texas',
+        'Lousiville',
+        'Vanderbilt',
+        'Texas Tech',
+        'TCU',
+        'Virginia',
+        'Mississippi'
+      ]);
+      return deferred.promise;
     };
     var currentLocation = function () {
       var deferred = $q.defer();
@@ -199,12 +214,13 @@ angular.module('cwsTailgate.map.controller', [
   '$log',
   function ($scope, cwsMapPoints, $log) {
     'use strict';
+    $scope.alerts = [];
     $scope.map = {
       center: {
         latitude: '41.1757071',
         longitude: '-96.01572449999999'
       },
-      zoom: 14
+      zoom: 13
     };
     $scope.mapctrl = {
       tailgates: [],
@@ -290,6 +306,7 @@ angular.module('cwsTailgate.map', [
 ]);
 angular.module('cwsTailgate', [
   'ngRoute',
+  'ngTouch',
   'cwsTailgate.map',
   'cws-tailgate-templates',
   'mongolabResourceHttp',

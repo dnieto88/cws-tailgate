@@ -5186,8 +5186,15 @@ body, html {
 .app {
   padding: 0.25em; }
 
+.alert-bar {
+  position: fixed;
+  top: -56px;
+  left: 0px;
+  width: 100%; }
+
 .angular-google-map-container {
-  height: 600px; }
+  height: 450px;
+  margin-left: -0.25rem; }
   .angular-google-map-container img {
     max-width: none;
     height: auto; }
@@ -5203,6 +5210,9 @@ body, html {
   color: whitesmoke;
   padding: 0.25rem;
   border: 1px solid white; }
+
+.tailgate-list {
+  font-size: 0.8rem; }
 
 .bus-label {
   background: white;

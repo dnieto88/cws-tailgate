@@ -222,6 +222,7 @@ function karmaExit(exitCode) {
 var karmaCommonConf = {
   browsers: ['PhantomJS'],
   frameworks: ['jasmine'],
+  reporters: ['progress', 'growl'],
   files: ['./bower_components/google-maps-mock/google-maps-mock.js',
     './bower_components/angular/angular.js',
     './bower_components/angular-route/angular-route.js',

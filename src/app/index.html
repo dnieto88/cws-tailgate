@@ -19,15 +19,20 @@
   <ng-view></ng-view>
 
   <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
-  <script src='/lodash/dist/lodash.underscore.js'></script>
+<script src='/lodash/dist/lodash.underscore.js'></script>  
+
   <!-- inject:vendor:js -->
   <script src="/angular/angular.js"></script>
   <script src="/angular-route/angular-route.js"></script>
   <script src="/lodash/dist/lodash.compat.js"></script>
   <script src="/angular-google-maps/dist/angular-google-maps.js"></script>
   <!-- endinject -->
+    
+  <script src='/angularjs-mongolab-promise/src/mongolabResourceHttp.js'></script>
+  
   <!-- inject:js -->
   <script src="/cws-tailgate-templates.js"></script>
+  <script src="/map/map-service.js"></script>
   <script src="/map/map-controller.js"></script>
   <script src="/map/map.js"></script>
   <script src="/app.js"></script>

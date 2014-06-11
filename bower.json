@@ -22,11 +22,13 @@
     "angular": "~1.2.14",
     "angular-route": "~1.2.14",
     "angular-google-maps": "latest",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+        "angularjs-mongolab-promise": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.14",
     "angular-google-maps": "~1.1.0",
-    "google-maps-mock": "~0.0.2"
+    "google-maps-mock": "~0.0.2",
+    "angularjs-mongolab-promise": "*"
   }
 }

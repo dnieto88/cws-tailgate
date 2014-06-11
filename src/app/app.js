@@ -1,17 +1,17 @@
-
 angular.module('cwsTailgate', [
   'ngRoute',
   'cwsTailgate.map',
-  'cws-tailgate-templates'
+  'cws-tailgate-templates',
+  'mongolabResourceHttp'
 ])
-.config(function ($routeProvider) {
-  'use strict';
-  $routeProvider
-    .when('/map', {
-      controller: 'MapCtrl',
-      templateUrl: '/cws-tailgate/map/map.html'
-    })
-    .otherwise({
-      redirectTo: '/map'
-    });
-});
+  .config(function($routeProvider) {
+    'use strict';
+    $routeProvider
+      .when('/map', {
+        controller: 'MapCtrl',
+        templateUrl: '/cws-tailgate/map/map.html'
+      })
+      .otherwise({
+        redirectTo: '/map'
+      });
+  });

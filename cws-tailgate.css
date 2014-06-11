@@ -5195,7 +5195,8 @@ body, html {
 
 .angular-google-map-container {
   height: 450px;
-  margin-left: -0.25rem; }
+  margin-left: -0.25rem;
+  width: 102%; }
   .angular-google-map-container img {
     max-width: none;
     height: auto; }

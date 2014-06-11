@@ -37,7 +37,6 @@ angular.module('cwsTailgate.map.service', ['mongolabResourceHttp'])
 
 	var currentLocation = function() {
 		var deferred = $q.defer();
-
 		
 		if (!angular.isDefined($window.navigator.geolocation)){
 			console.log("No geolocation");

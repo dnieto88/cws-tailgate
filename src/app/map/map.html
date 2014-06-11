@@ -1,6 +1,8 @@
-  <div class='alert-bar'>
-   <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
-  </div>
+<div class='alert-bar'>
+ <alert ng-repeat="alert in alerts | limitTo: 1" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+</div>
+
+<small class='error' ng-hide='mapctrl.hasLocation'>Unable to grab your current locaiton</small>
 
 <div class='begin' ng-hide='mapctrl.selectedTeam'>
   <div class='row'>
@@ -45,18 +47,18 @@
   <div class='row'>
     <div class='small-12 medium-6 columns '>
       <div class='panel primary add-team-form'>
-        <h2>{{mapctrl.selectedTeam}} Tail Gates</h2>
+        <h2>{{mapctrl.selectedTeam}} Tailgate</h2>
         <p class='alert-panel' ng-hide='mapctrl.tailgates'>
-        	There are no tail gates for {{mapctrl.selectedTeam}} yet.  Be the first to start the party
+        	There are no Tailgate for {{mapctrl.selectedTeam}} yet.  Be the first to start the party
         </p>
         <div ng-repeat='tg in mapctrl.tailgates' class='tailgate-list'>
-          {{tg.name}} | {{tg.time | date}}
+          {{tg.name}} | {{tg.time | date}} | <a ng-click='removeLocation(tg)'>Stop this bus</a>
         </div>
       </div>
     </div>
     <div class='small-12 medium-6 columns'>
       <div class='panel primary add-team-form'>
-        <h2>Add Tail Gate</h2>
+        <h2>Add Tailgate</h2>
         <form name='form' novalidate>
           <div class='row'>
 

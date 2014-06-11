@@ -3,12 +3,13 @@ body, html {
 }
 
 .app {
-	padding: .25em;
+	padding: .25rem;
 }
 
 .alert-bar {
 	position: fixed;
-	top: -56px;
+	top: -0px;
 	left: 0px;
 	width: 100%;
+	z-index: 99999;
 }

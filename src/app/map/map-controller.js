@@ -16,7 +16,9 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
     $scope.mapctrl = {
       tailgates: [],
       currentLocation: {},
-      useCurrentLocation: true
+      useCurrentLocation: true,
+      teams: [],
+      selectedTeam: ''
     };
 
 
@@ -24,15 +26,27 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
       team: tempTeam
     };
 
+    $scope.getTeams = function() {
+
+      cwsMapPoints.getAllTeams().then(function(success) {
+        console.log('get All teams', success);
+        $scope.mapctrl.teams = success;
+        //$scope.mapctrl.selectedTeam = success[0];
+      }, function(err) {
+        console.log(err);
+      });
+    };
+
     $scope.getTailGates = function() {
-      cwsMapPoints.get().then(function(success) {
+      console.log('Getting tailgates for team', $scope.mapctrl.selectedTeam);
+      cwsMapPoints.get($scope.mapctrl.selectedTeam).then(function(success) {
         //add id for google maps api
-        for (var i = 0; i < success.length; i++){
+        for (var i = 0; i < success.length; i++) {
           success[i].id = i;
         };
 
         $scope.mapctrl.tailgates = success;
-        console.log(success);
+        console.log('tailgates: -> ',success);
       }, function(err) {
         console.log(err);
       });
@@ -53,7 +67,7 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
       if ($scope.mapctrl.useCurrentLocation) {
         ntg.coords = $scope.mapctrl.currentLocation.coords;
         ntg.time = $scope.mapctrl.currentLocation.timestamp;
-        
+
       }
 
       cwsMapPoints.add(ntg).then(function(success) {
@@ -65,7 +79,9 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
 
       }, function(err) {
         console.log(err);
-      }).then($scope.getTailGates());
+      })
+      //refresh map
+      .then($scope.getTailGates());
     }
 
     //TODO: replace with configurable constant
@@ -83,6 +99,7 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
     };
 
     //init functions seperated for testability
-    $scope.getTailGates();
+    //$scope.getTailGates();
     $scope.getCurrentLocation();
+    $scope.getTeams();
   });

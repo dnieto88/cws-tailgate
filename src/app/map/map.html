@@ -1,19 +1,28 @@
 <h1>Tailgates near you</h1>
-<google-map center="map.center" zoom="map.zoom">
-  <!--   <marker coords='currentLocationMarker.coords'>
-  </marker> -->
-  <markers models='mapctrl.tailgates' coords="'coords'" labelContent="'name'" labelAnchor="0 0" labelClass="tailgate-label">
-  </markers>
-</google-map>
-<form ng-model='newtailGate'>
-  <label>Name:
-    <input ng-model='newTailGate.name'>
-  </label>
-  <label>Team:
-    <input ng-model='newTailGate.team'>
-  </label>
-  <label>Use Current Location
-    <input type='checkbox' ng-model='mapctrl.useCurrentLocation'>
-  </label>
-  <button ng-click='add(newTailGate)'>Add tailgate</button>
-</form>
+<label>Select A Team</label>
+
+<select ng-model="mapctrl.selectedTeam" ng-options="t as t for t in mapctrl.teams" , ng-change="getTailGates(team)">
+<option value="">-- To Begin Select a Team--</option>
+</select>
+
+<div ng-if='mapctrl.selectedTeam' ng-cloak>
+  <google-map center="map.center" zoom="map.zoom">
+    <marker coords='currentLocationMarker.coords'>
+    </marker>
+    <markers models='mapctrl.tailgates' coords="'coords'" labelContent="'name'" labelAnchor="0 0" labelClass="tailgate-label">
+    </markers>
+  </google-map>
+
+  <form ng-model='newtailGate'>
+    <label>Name:
+      <input ng-model='newTailGate.name'>
+    </label>
+    <label>Team:
+      <input ng-model='newTailGate.team'>
+    </label>
+    <label>Use Current Location
+      <input type='checkbox' ng-model='mapctrl.useCurrentLocation'>
+    </label>
+    <button ng-click='add(newTailGate)'>Add tailgate</button>
+  </form>
+</div>

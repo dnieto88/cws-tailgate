@@ -6,17 +6,24 @@ angular.module('cwsTailgate.map.service', ['mongolabResourceHttp'])
 .factory('cwsMapPoints', function($mongolabResourceHttp, $window, $q){
 	var mongo = $mongolabResourceHttp('tailgates');
 
-	var get = function() {
-		return mongo.all();
+	var get = function(team) {
+		var team = team || '';
+		return mongo.query({
+			"team": team
+		});
 	}
 	
 	var add = function(tailgate) {
 		if(!!tailgate.useCurrentLocation){
 			delete tailgate.useCurrentLocation;
 		}
-		
+
 		var newTailGate = new mongo(tailgate);
 		return newTailGate.$saveOrUpdate();
+	}
+
+	var getAllTeams = function() {
+		return mongo.distinct('team');
 	}
 
 	var currentLocation = function() {
@@ -41,6 +48,7 @@ angular.module('cwsTailgate.map.service', ['mongolabResourceHttp'])
 
 	return {
 		get: get,
+		getAllTeams: getAllTeams,
 		add: add,
 		currentLocation: currentLocation 
 	};

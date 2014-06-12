@@ -1,10 +1,8 @@
 angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google-maps'])
-  .controller('MapCtrl', function($scope, cwsMapPoints, $log) {
+  .controller('MapCtrl', function($scope, cwsMapPoints, $log, $tour) {
     'use strict';
 
     $scope.alerts = [];
-
-
 
     $scope.closeAlert = function(i) {
       $scope.alerts.splice(i, 1);
@@ -84,12 +82,14 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
           type: 'success',
           msg: 'The party is over.'
         });
+
+        $scope.getTailGates();
       }, function(err) {
         $scope.alerts.push({
           type: 'error',
           msg: 'This party just wont stop'
         });
-      }).then($scope.getTailGates());
+      });
     };
 
     //get users geolocation
@@ -131,6 +131,8 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
           type: 'success',
           msg: 'Tailgate succesfully added!'
         });
+
+        $scope.getTailGates();
       }, function(err) {
         $scope.alerts.push({
           type: 'danger',
@@ -138,8 +140,7 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
         });
 
       })
-      //refresh map
-      .then($scope.getTailGates());
+   
     };
 
     //TODO: replace with configurable constant
@@ -173,4 +174,5 @@ angular.module('cwsTailgate.map.controller', ['cwsTailgate.map.service', 'google
     //$scope.getTailGates();
     $scope.getCurrentLocation();
     $scope.getTeams();
+    $tour.start();
   });
